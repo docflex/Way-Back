@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  web:
+    image: python:3.9
+    command: bash -c "pip3 install -r requirements.txt && python3 manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./way-back/backend:/app
+    environment:
+      - DJANGO_SETTINGS_MODULE=core.settings
+      - DATABASE_URL=sqlite:///db.sqlite3
+
+  fetch-youtube-videos:
+    image: python:3.9
+    command: bash -c "pip3 install -r requirements.txt && python3 manage.py runserver && python3 persistFetch.py"
+    volumes:
+      - ./way-back/backend:/app
+    environment:
+      - DJANGO_SETTINGS_MODULE=core.settings
+      - DATABASE_URL=sqlite:///db.sqlite3
+
+volumes:
+  postgres_data:
